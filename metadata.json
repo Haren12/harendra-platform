@@ -1,0 +1,6 @@
+{
+  "name": "Harendra Lamsal Personal Technology Platform",
+  "description": "An elite bilingual (Nepali/English) enterprise technology platform combining portfolio, programming blogs, tech news portal, and Gemini-powered professional CMS.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
