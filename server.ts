@@ -9,8 +9,8 @@ import dotenv from "dotenv";
 import fs from "fs";
 import { GoogleGenAI } from "@google/genai";
 import { createClient } from "@supabase/supabase-js";
-import { initialBlogs, initialNews, initialProjects, initialCertificates, initialSnippets, initialTutorials } from "./src/data/initialData.js";
-import { BlogPost, NewsArticle, Project, Certificate, CodeSnippet, ContactSubmission, Tutorial } from "./src/types.js";
+import { initialBlogs, initialNews, initialProjects, initialCertificates, initialSnippets, initialTutorials } from "./src/data/initialData";
+import { BlogPost, NewsArticle, Project, Certificate, CodeSnippet, ContactSubmission, Tutorial } from "./src/types";
 
 // Load environment variables
 dotenv.config();
@@ -138,7 +138,7 @@ async function selfHealingInsert(tableName: string, payload: any) {
     
     if (!error) {
       console.log(`[Supabase DB] Insert succeeded in table "${tableName}"!`);
-      return data[0];
+      return (data && data[0]) ? data[0] : currentPayload;
     }
     
     console.error(`[Supabase DB] Insert into "${tableName}" failed:`, error);
@@ -233,7 +233,7 @@ async function selfHealingUpdate(tableName: string, id: string, payload: any) {
     
     if (!error) {
       console.log(`[Supabase DB] Update succeeded on table "${tableName}"!`);
-      return data[0] || { id, ...currentPayload };
+      return (data && data[0]) ? data[0] : { id, ...currentPayload };
     }
     
     console.error(`[Supabase DB] Update on "${tableName}" failed:`, error);
@@ -906,12 +906,6 @@ app.delete("/api/tutorials/:id", async (req, res) => {
     console.error("Failed to delete tutorial from database:", error);
     res.status(500).json({ error: error.message || "Could not delete tutorial." });
   }
-});
-
-app.delete("/api/tutorials/:id", (req, res) => {
-  const { id } = req.params;
-  tutorials = tutorials.filter((t) => t.id !== id);
-  res.json({ success: true, id });
 });
 
 // Comments API
